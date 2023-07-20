@@ -75,12 +75,13 @@ function updatePagination() {
 
 function fetchQuotes() {
   let url = `https://api.quotable.io/quotes/random?page=${page}&limit=20`
-  if (query) {
-    url = `https://api.quotable.io/search/quotes?query=${query}`
-  }
   if (author) {
     url = `https://api.quotable.io/quotes?author=${author}`
   }
+  if (query) {
+    url = `https://api.quotable.io/search/quotes?query=${query}`
+  }
+
 
   fetch(url)
     .then((response) => {
