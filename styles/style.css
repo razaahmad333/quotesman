@@ -54,4 +54,8 @@ nav li a {
 
 #pagination .page-link {
   color: rgb(64, 207, 160);
+}
+
+.share {
+  color: rgb(64, 207, 160) !important;
 }/*# sourceMappingURL=style.css.map */

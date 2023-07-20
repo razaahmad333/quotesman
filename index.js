@@ -102,11 +102,12 @@ function updateCardsWithQuotes(quotes) {
   quotes.forEach((quote) => {
     const template = `
       <div class="col-sm-12 mb-4 col-md-4">
-        <div class="card text-black bg-white" style="height:180px;">
+        <div class="card text-black bg-white" style="">
           <div class="card-header">${quote.author || "Unknown"}</div>
           <div class="card-body">
-            <p class="card-text" title=${quote.content} >${quote.content.slice(0, 150)}</p>
+            <p class="card-text" title=${quote.content} >${quote.content.slice(0, 350)}</p>
           </div>
+            <a href="whatsapp://send?text=${quote.content}       by ${quote.author || "Unknown"}" class="btn share">Share</a>
         </div>
       </div>
  `
