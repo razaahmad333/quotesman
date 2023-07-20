@@ -1,6 +1,9 @@
 let page = 1
+let maxPage = 100
 let query = ""
 let author = ""
+
+
 
 const prevBtn = document.querySelector(" #previous")
 const nextBtn = document.querySelector(" #next ")
@@ -8,6 +11,8 @@ const nextBtn = document.querySelector(" #next ")
 const first = document.querySelector(" #first ")
 const second = document.querySelector(" #second ")
 const third = document.querySelector(" #third ")
+
+fetchQuotes()
 
 document.querySelector("#query").onkeyup = (event) => {
   query = event.target.value
@@ -23,73 +28,100 @@ prevBtn.onclick = () => {
     return
   }
   page--
-  updatePagination()
+  fetchQuotes()
 }
 
 nextBtn.onclick = () => {
-  if (page === 100) {
+  if (page === maxPage) {
     return
   }
   page++
-  updatePagination()
+  fetchQuotes()
 }
 
 [first, second, third].forEach((element) => {
   element.onclick = () => {
     page = parseInt(element.textContent)
-    updatePagination()
+    if (page > maxPage) {
+      page = maxPage
+    }
+    fetchQuotes()
   }
 })
 
-fetchQuotes()
 
 function updatePagination() {
+  const paginationItems = [prevBtn, nextBtn, first, second, third]
+
+  paginationItems.forEach(item => {
+    item.parentElement.classList.remove("active", "disabled")
+  })
+
   if (page === 1) {
     prevBtn.parentElement.classList.add("disabled")
   }
-
-  if (page > 1) {
-    prevBtn.parentElement.classList.remove("disabled")
-  }
-
-  first.parentElement.classList.remove("active")
-  second.parentElement.classList.remove("active")
-
-  if (page > 1) {
-    first.textContent = page - 1
-    second.textContent = page
-    third.textContent = page + 1
-    second.parentElement.classList.add("active")
-  } else {
-    first.textContent = page
-    second.textContent = page + 1
-    third.textContent = page + 2
-    first.parentElement.classList.add("active")
-  }
-
-  if (page > 100) {
+  if (page === maxPage) {
     nextBtn.parentElement.classList.add("disabled")
   }
-  fetchQuotes()
+
+  let [firstPage, secondPage, thirdPage] = [page, page + 1, page + 2]
+
+  if (page > 1) {
+    [firstPage, secondPage, thirdPage] = [page - 1, page, page + 1]
+  }
+
+  first.textContent = firstPage
+  second.textContent = secondPage
+  third.textContent = thirdPage;
+
+  [first, second, third].forEach((el, index) => {
+    if (parseInt(el.textContent) > maxPage) {
+      el.parentElement.classList.add("disabled")
+    }
+    if (page === firstPage + index) {
+      el.parentElement.classList.add("active")
+    }
+  })
+
 }
 
+function disabledPagination() {
+  const paginationItems = [prevBtn, nextBtn, first, second, third]
+  paginationItems.forEach(item => {
+    item.parentElement.classList.add("disabled")
+  })
+}
+
+function enablePagination() {
+  const paginationItems = [prevBtn, nextBtn, first, second, third]
+  paginationItems.forEach(item => {
+    item.parentElement.classList.remove("disabled")
+  })
+}
+
+
 function fetchQuotes() {
+
   let url = `https://api.quotable.io/quotes/random?page=${page}&limit=20`
   if (author) {
-    url = `https://api.quotable.io/quotes?author=${author}`
+    url = `https://api.quotable.io/quotes?author=${author}&page=${page}`
   }
   if (query) {
     url = `https://api.quotable.io/search/quotes?query=${query}`
   }
 
+  disabledPagination()
 
   fetch(url)
     .then((response) => {
       return response.json()
     })
     .then((jsondata) => {
+      enablePagination()
       const quotes = jsondata.results || jsondata
+      maxPage = jsondata.totalPages || 100
       updateCardsWithQuotes(quotes)
+      updatePagination()
     })
     .catch((error) => {
       console.log(error)
@@ -175,6 +207,7 @@ function updateAuthorDropdown(authors) {
       } else {
         document.querySelector("#author_search_text").value = item.textContent
         author = item.textContent
+        page = 1
         authorDropdown.classList.remove("show")
         fetchQuotes()
       }
