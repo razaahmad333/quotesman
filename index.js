@@ -135,7 +135,7 @@ function updateCardsWithQuotes(quotes) {
     const template = `
       <div class="col-sm-12 mb-4 col-md-4">
         <div class="card text-black bg-white" style="">
-          <div class="card-header">${quote.author || "Unknown"}</div>
+          <div class="card-header btn">${quote.author || "Unknown"}</div>
           <div class="card-body">
             <p class="card-text text-muted" title=${quote.content} >${quote.content.slice(0, 350)}</p>
           </div>
@@ -144,6 +144,15 @@ function updateCardsWithQuotes(quotes) {
       </div>
  `
     quoteContainer.innerHTML += template
+  })
+
+  document.querySelectorAll(".card-header").forEach((header) => {
+    header.onclick = () => {
+      author = header.textContent
+      document.querySelector("#author_search_text").value = author
+      page = 1
+      fetchQuotes()
+    }
   })
 }
 
