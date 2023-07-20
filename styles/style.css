@@ -58,4 +58,9 @@ nav li a {
 
 .share {
   color: rgb(64, 207, 160) !important;
+}
+
+footer a {
+  color: rgb(64, 207, 160) !important;
+  font-weight: 600;
 }/*# sourceMappingURL=style.css.map */

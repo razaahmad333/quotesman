@@ -105,7 +105,7 @@ function updateCardsWithQuotes(quotes) {
         <div class="card text-black bg-white" style="">
           <div class="card-header">${quote.author || "Unknown"}</div>
           <div class="card-body">
-            <p class="card-text" title=${quote.content} >${quote.content.slice(0, 350)}</p>
+            <p class="card-text text-muted" title=${quote.content} >${quote.content.slice(0, 350)}</p>
           </div>
             <a href="whatsapp://send?text=${quote.content}       by ${quote.author || "Unknown"}" class="btn share">Share</a>
         </div>
