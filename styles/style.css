@@ -6,28 +6,19 @@ nav li a {
 
 .mainHead {
   font-family: "Satisfy", cursive;
-  font-size: 55px;
-  margin-bottom: 0%;
-  margin-top: 5%;
-  color: #40cfa0;
-  margin-right: 50%;
-  -webkit-animation-duration: 2s -1;
-          animation-duration: 2s -1;
-  margin-top: 5%;
-  margin-bottom: 0%;
+  font-size: 3rem;
+  color: rgb(64, 207, 160);
 }
 
 .headOfPage {
   text-align: center;
-  color: #40cfa0;
+  color: rgb(64, 207, 160);
   font-family: "Satisfy", cursive;
   margin: 20px 0;
 }
 
 .card {
   background-color: white;
-  height: 100%;
-  width: 90%;
 }
 
 .heart {
@@ -35,15 +26,9 @@ nav li a {
 }
 
 .cols {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -51,6 +36,22 @@ nav li a {
   font-size: 1.5em;
   text-align: center;
   font-family: "Satisfy", cursive;
-  color: #40cfa0;
+  color: rgb(64, 207, 160);
 }
-/*# sourceMappingURL=style.css.map */
+
+#pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+#pagination .page-item.active .page-link {
+  background-color: rgb(64, 207, 160);
+  border-color: rgb(64, 207, 160);
+  color: white;
+}
+
+#pagination .page-link {
+  color: rgb(64, 207, 160);
+}/*# sourceMappingURL=style.css.map */
