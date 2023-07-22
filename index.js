@@ -181,7 +181,7 @@ function populateChooseThemeContainer() {
 
 function getCardTemplate(pathName, quote) {
   if (pathName === "/instagram-mode.html") {
-    const windowWidth = window.innerWidth - 30
+    const windowWidth = window.innerWidth > 768 ? 360 : window.innerWidth - 50
     const gradient = gradientIndex === -1 ? getRandomGradient() : gradients[gradientIndex]
     return `
     <div class="col-sm-12 mb-4 col-md-4">
