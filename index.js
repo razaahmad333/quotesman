@@ -2,7 +2,21 @@ let page = 1
 let maxPage = 100
 let query = ""
 let author = ""
+const gradients = [
+  "linear-gradient(45deg, #4E80D6, #66A9FF)",
+  "linear-gradient(45deg, #8054D6, #BF66FF)",
+  "linear-gradient(45deg, #50A364, #7BCD91)",
+  "linear-gradient(45deg, #FF6767, #FFB845)",
+  "linear-gradient(45deg, #FFD766, #F05A6D)",
+  "linear-gradient(45deg, #F567A6, #FFB845)",
+  "linear-gradient(45deg, #FFA83D, #FFB845)",
+  "linear-gradient(45deg, #45D6C5, #82FFB4)",
+  "linear-gradient(45deg, #213B64, #2B587A)",
+  "linear-gradient(45deg, #502B64, #764A95)",
+  "linear-gradient(135deg, #FF6B6B 0%, #FFC3A0)",
+]
 
+let gradientIndex = -1
 
 
 const prevBtn = document.querySelector(" #previous")
@@ -13,6 +27,7 @@ const second = document.querySelector(" #second ")
 const third = document.querySelector(" #third ")
 
 fetchQuotes()
+populateChooseThemeContainer()
 
 document.querySelector("#query").onkeyup = (event) => {
   query = event.target.value
@@ -48,6 +63,10 @@ nextBtn.onclick = () => {
     fetchQuotes()
   }
 })
+
+setTimeout(() => {
+  document.querySelector(".alert").remove()
+}, 3000)
 
 
 function updatePagination() {
@@ -128,25 +147,77 @@ function fetchQuotes() {
     })
 }
 
-function updateCardsWithQuotes(quotes) {
-  const quoteContainer = document.querySelector(".quoteContainer")
-  quoteContainer.innerHTML = ""
-  quotes.forEach((quote) => {
-    const template = `
+function getRandomGradient() {
+  const randomIndex = Math.floor(Math.random() * gradients.length)
+  return gradients[randomIndex]
+}
+
+
+function populateChooseThemeContainer() {
+  const chooseThemeContainer = document.querySelector("#chooseThemeContainer")
+  const pathName = window.location.pathname
+  if (pathName === "/instagram-mode.html") {
+    chooseThemeContainer.innerHTML = `
+    <button class="btn col-2 ml-2 rounded mb-4" style="background:""; height:40px;" id="-1"  >
+    `
+    gradients.forEach((gradient, index) => {
+      chooseThemeContainer.innerHTML += `
+      <button class="btn col-2 ml-2 rounded mb-4" style="background:${gradient}; height:40px;" id="${index}"  >
+    </button>
+      `
+    })
+
+    document.querySelectorAll("#chooseThemeContainer button").forEach((button) => {
+      button.onclick = () => {
+        gradientIndex = parseInt(button.id)
+        console.log(gradientIndex)
+        document.querySelectorAll(".card").forEach((card) => {
+          card.style.background = gradientIndex === -1 ? getRandomGradient() : gradients[gradientIndex]
+        })
+      }
+    })
+  }
+}
+
+function getCardTemplate(pathName, quote) {
+  if (pathName === "/instagram-mode.html") {
+    const windowWidth = window.innerWidth - 30
+    const gradient = gradientIndex === -1 ? getRandomGradient() : gradients[gradientIndex]
+    return `
+    <div class="col-sm-12 mb-4 col-md-4">
+      <div class="card text-white" style="height:${windowWidth}px; background: ${gradient};">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+          <p class="card-text text-white mb-4" style="font-size:1.1rem;" title=${quote.content}>${quote.content.slice(0, 350)}</p>
+          <p class="h5 text-white author-head mt-4" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);"> ~ ${quote.author || "Unknown"}</p>
+        </div>
+      </div>
+    </div>
+    `
+
+  }
+  return `
       <div class="col-sm-12 mb-4 col-md-4">
         <div class="card text-black bg-white" style="">
-          <div class="card-header btn">${quote.author || "Unknown"}</div>
+          <div class="card-header author-head btn">${quote.author || "Unknown"}</div>
           <div class="card-body">
             <p class="card-text text-muted" title=${quote.content} >${quote.content.slice(0, 350)}</p>
           </div>
             <a href="whatsapp://send?text=${quote.content}       by ${quote.author || "Unknown"}" class="btn share">Share</a>
         </div>
       </div>
- `
-    quoteContainer.innerHTML += template
+`
+}
+
+function updateCardsWithQuotes(quotes) {
+  const quoteContainer = document.querySelector(".quoteContainer")
+  quoteContainer.innerHTML = ""
+  const pathName = window.location.pathname
+
+  quotes.forEach((quote) => {
+    quoteContainer.innerHTML += getCardTemplate(pathName, quote)
   })
 
-  document.querySelectorAll(".card-header").forEach((header) => {
+  document.querySelectorAll(".author-head ").forEach((header) => {
     header.onclick = () => {
       author = header.textContent
       document.querySelector("#author_search_text").value = author

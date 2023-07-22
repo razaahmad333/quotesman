@@ -39,6 +39,11 @@ nav li a {
   color: rgb(64, 207, 160);
 }
 
+.author-head {
+  font-family: "Satisfy", cursive;
+  font-size: 1.5em;
+}
+
 #pagination {
   display: flex;
   justify-content: center;
